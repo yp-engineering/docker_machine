@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Ruby interface to docker-machine cli.}
   spec.description   = %q{Used primarily for spawning a docker swarm cluster for docker engine testing.}
-  spec.homepage      = "yp.com"
+  spec.homepage      = "http://tech.yp.com"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or

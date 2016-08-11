@@ -16,6 +16,11 @@ class TestDockerMachine < Minitest::Test
     assert_match(/NAME/, @dm.out)
   end
 
+  def test_allows_passthrough_with_more_args
+    assert @dm.call 'ls -f "NAME: {{.Name}}"'
+    assert_match(/NAME/, @dm.out)
+  end
+
   def test_fails_with_bogus_docker_machine_command
     assert_raises @cls::CLIError do
       @dm.call 'crap input'
@@ -23,10 +28,12 @@ class TestDockerMachine < Minitest::Test
   end
 
   def test_fails_with_malicious_args
+    file = '/tmp/not-too-malicious-but-proves-the-point'
     assert_raises @cls::CLIError do
-      @dm.call '; touch /tmp/not-too-malicious-but-proves-the-point ;'
+      @dm.call "; touch #{file} ;"
     end
-    assert_match(/touch.*not a docker-machine command/, @dm.err)
+    assert_match(/;.*not a docker-machine command/, @dm.err)
+    refute File.exist? file
   end
 
   # Can't figure out how to capture STDOUT from this call because I am using

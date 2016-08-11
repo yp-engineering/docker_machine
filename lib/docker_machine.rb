@@ -32,10 +32,18 @@ class DockerMachine
       out_rd, out_wr = IO.pipe
     end
 
-    cmd = %W(docker-machine #{cli_args})
-    p "Command to docker-machine is: `#{cmd}`" if opts[:debug] == true
+    cmd = "docker-machine #{cli_args}"
+    puts "Command to docker-machine is: `#{cmd}`" if opts[:debug] == true
 
-    Process.wait spawn(*cmd, err: err_wr, out: out_wr)
+    Process.wait spawn(
+      'docker-machine', *cli_args.split, err: err_wr, out: out_wr
+    )
+
+    code = $?.exitstatus
+    case code
+    when 0
+      true
+    end
   ensure
     # cleanup the pipes
     err_wr.close if err_wr.respond_to? :close
@@ -50,13 +58,7 @@ class DockerMachine
     end
 
     # handle exit, after because CLIError uses @err and @out
-    code = $?.exitstatus
-    case code
-    when 0
-      true
-    else
-      raise DockerMachine::CLIError.new self, code
-    end
+    raise DockerMachine::CLIError.new self, code if code > 0
   end
 
 end
