@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Ruby interface to docker-machine cli.}
   spec.description   = %q{Used primarily for spawning a docker swarm cluster for docker engine testing.}
-  spec.homepage      = "http://tech.yp.com"
+  spec.homepage      = "https://github.com/yp-engineering/docker_machine"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
